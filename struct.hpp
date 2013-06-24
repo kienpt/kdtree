@@ -20,8 +20,8 @@ namespace QProcessor
 	struct Point
 	{
 
-		Point(uint32_t id, uint32_t time, float lat, float lon)
-			:_id(id), _time(time), _lat(lat), _lon(lon){}
+//		Point(uint32_t id, uint32_t time, float lat, float lon)
+//			:_id(id), _time(time), _lat(lat), _lon(lon){}
 
 		uint32_t _id;
 		float _lon;

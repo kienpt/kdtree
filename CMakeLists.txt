@@ -11,5 +11,10 @@ find_package(Boost 1.42 COMPONENTS system iostreams filesystem timer REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
+set(SOURCES
+	queryManager.cpp
+	kdtree.cpp
+)
+add_executable(${SOURCES})
 add_executable(main main.cpp)
 target_link_libraries(main ${Boost_LIBRARIES})

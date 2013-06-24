@@ -8,11 +8,11 @@ namespace QProcessor
 	class QueryManager
 	{
 	private:
-		Point * _point;
+		KDTree *_kdtree;
 	public:
-		QueryManager(){};
-		~QueryManager(){};
-		void queryData(){};
+		QueryManager(std::string csvfile);
+		~QueryManager();
+		void queryData();
 
 	};
 
