@@ -1,4 +1,4 @@
-#include "querymanager.hpp"
+#include "queryManager.hpp"
 
 namespace QProcessor
 {
@@ -11,7 +11,7 @@ namespace QProcessor
 	{
 	}
 
-	void QuerryManager::queryData()
+	void QueryManager::queryData()
 	{
 	}
 }

@@ -14,7 +14,7 @@ include_directories(${Boost_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 set(SOURCES
 	queryManager.cpp
 	kdtree.cpp
+	main.cpp
 )
-add_executable(${SOURCES})
-add_executable(main main.cpp)
+add_executable(main ${SOURCES})
 target_link_libraries(main ${Boost_LIBRARIES})

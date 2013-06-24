@@ -1,4 +1,4 @@
-#include "kdtree.cpp"
+#include "kdtree.hpp"
 
 namespace QProcessor
 {
