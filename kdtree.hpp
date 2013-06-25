@@ -19,17 +19,33 @@ namespace QProcessor
 		public:
 			inline uint32_t createTime(std::string mytime)
 			{
+				/*
 				std::vector<std::string> strs;
 				boost::split(strs,mytime,boost::is_any_of("/"));
 				int month = boost::lexical_cast<int>(strs[0]);
 				int day = boost::lexical_cast<int>(strs[1]);
 				int year = boost::lexical_cast<int>(strs[2]);
-
+				
 				//Default
 				int hour = 12;
 				int min = 12;
 				int sec = 12;
+				*/
+				std::vector<std::string> strs;
+                                boost::split(strs,mytime,boost::is_any_of("T"));			
+				std::vector<std::string> date;
+				boost::split(date,strs[0],boost::is_any_of("-"));
+				std::vector<std::string> time;
+				boost::split(time,strs[1],boost::is_any_of(":"));
 
+				int month = boost::lexical_cast<int>(date[1]);
+                                int day = boost::lexical_cast<int>(date[2]);
+                                int year = boost::lexical_cast<int>(date[0]);
+
+				int hour = boost::lexical_cast<int>(time[0]);
+                                int min = boost::lexical_cast<int>(time[1]);
+                                int sec = boost::lexical_cast<int>(time[2]);
+				
 				struct tm timeinfo;
 				memset(&timeinfo, 0, sizeof(timeinfo));
 				timeinfo.tm_year = year-1900;
@@ -65,7 +81,7 @@ namespace QProcessor
 			Iterator begin();
 			Iterator end();
 			void buildKdTree(KdNode *nodes, uint32_t *tmp, Point *points, uint64_t n, int depth, uint64_t thisNode, uint64_t &freeNode);
-			void createKdTree(std::string csvfile);
+			bool createKdTree(std::string csvfile);
 			bool csv2binary(std::string csvIn, std::string binOut);
 		private:
 			void searchKdTree(const KdNode *nodes, uint32_t root, uint32_t range[7][2], int depth, const Query &query, QueryResult &result);

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "kdtree.hpp"
 
 namespace QProcessor
@@ -77,11 +78,12 @@ namespace QProcessor
 			nodes[nextNode->_childNode+1]._childNode = -1;
 	}
 
-	void KDTree::createKdTree(std::string csvfile) {
+	bool KDTree::createKdTree(std::string csvfile) {
 		//Conver csv to binary first
 		std::string binaryfile = csvfile + ".bin";
 		std::string kdtreefile = csvfile + ".kdtree";
-		this->csv2binary(csvfile, binaryfile);
+		if (this->csv2binary(csvfile, binaryfile) == false)
+			return false;
 		boost::iostreams::mapped_file mfile(binaryfile, boost::iostreams::mapped_file::priv);
 		uint64_t n = mfile.size()/sizeof(Point);
 		Point *points = (Point*)mfile.const_data();
@@ -102,11 +104,12 @@ namespace QProcessor
 		mfile.close();
 		free(nodes);
 		free(tmp);
+		return true;
 	}
 
 	bool KDTree::csv2binary(std::string csvIn, std::string binOut)
 	{
-		int indices[] = {-1 ,-1 , -1}; //array of indices to the attributes with the order: id, lattitude, longitude, time.
+		int indices[] = {-1 ,-1 , -1, -1}; //array of indices to the attributes with the order: id, lattitude, longitude, time.
 		int attNum; //number of attributes
 		FILE *fo = fopen(binOut.c_str(), "wb");
 		std::ifstream  in(csvIn.c_str());
@@ -120,16 +123,20 @@ namespace QProcessor
 		attNum = attNames.size();
 		for(int i=0; i<attNum; i++)
 		{
-			if (attNames[i].compare("ID")) indices[0] = i;
+			std::cout<<attNames[i]<<std::endl;
+			if 	(attNames[i].compare("ID") ==0) 	indices[0] = i;
 			else if (attNames[i].compare("Lattitude") == 0) indices[1] = i;
 			else if (attNames[i].compare("Longitude") == 0) indices[2] = i;
-			else if (attNames[i].compare("Time") == 0) indices[3] = i;
+			else if (attNames[i].compare("Time") == 0)	indices[3] = i;
 		}
 
 		//Check indices
-		for(int i=0; i<3; i++)
+		for(int i=0; i<4; i++)
+		{
+			std::cout<<indices[i]<<std::endl;
 			if (indices[i] == -1)
 				return false;
+		}
 
 		std::string temp;
 		while(std::getline(in, line))
