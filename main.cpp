@@ -7,5 +7,6 @@ int main(int argc, char** argv)
 {
 	std::cout<<"Test"<<std::endl;
 	QueryManager qm("test.csv");	
+	qm.queryData();
 	return 0;
 }

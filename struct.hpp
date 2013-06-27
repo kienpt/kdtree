@@ -113,11 +113,17 @@ namespace QProcessor
 			this->_maxLon = maxLon;
 		}
 
+		void setTime(uint32_t minTime, uint32_t maxTime)
+		{
+			this->_minTime = minTime;
+			this->_maxTime = maxTime;
+		}
+
 		bool isMatched(const Point * p) const
 		{
 			return (this->_minTime<=p->_time && p->_time<=this->_maxTime &&
 					this->_minLat<=p->_lat && p->_lat<=this->_maxLat &&
-					this->_minLon<=p->_lat && p->_lon<=this->_maxLon);
+					this->_minLon<=p->_lon && p->_lon<=this->_maxLon);
 		}
 
 		uint32_t _minTime;

@@ -8,6 +8,7 @@
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+#include <iostream>
 #include "radix.h"
 #include "struct.hpp"
 
@@ -17,7 +18,7 @@ namespace QProcessor
 	class KDTree
 	{
 		public:
-			inline uint32_t createTime(std::string mytime)
+			inline static uint32_t createTime(std::string mytime)
 			{
 				/*
 				std::vector<std::string> strs;
@@ -45,7 +46,7 @@ namespace QProcessor
 				int hour = boost::lexical_cast<int>(time[0]);
                                 int min = boost::lexical_cast<int>(time[1]);
                                 int sec = boost::lexical_cast<int>(time[2]);
-				
+
 				struct tm timeinfo;
 				memset(&timeinfo, 0, sizeof(timeinfo));
 				timeinfo.tm_year = year-1900;
@@ -84,7 +85,7 @@ namespace QProcessor
 			bool createKdTree(std::string csvfile);
 			bool csv2binary(std::string csvIn, std::string binOut);
 		private:
-			void searchKdTree(const KdNode *nodes, uint32_t root, uint32_t range[7][2], int depth, const Query &query, QueryResult &result);
+			void searchKdTree(const KdNode *nodes, uint32_t root, uint32_t range[3][2], int depth, const Query &query, QueryResult &result);
 			uint32_t float2uint(float f) ;
 
 			boost::iostreams::mapped_file_source _fTree;

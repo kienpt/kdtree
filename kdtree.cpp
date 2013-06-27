@@ -1,4 +1,5 @@
 #include <iostream>
+#include "boost/filesystem.hpp"
 #include "kdtree.hpp"
 
 namespace QProcessor
@@ -7,8 +8,18 @@ namespace QProcessor
 	//Init
 	KDTree::KDTree(std::string csvfile)
 	{
-		//build kdtree here
-		this->createKdTree(csvfile);
+		//build kdtree here	
+		bool res = true;
+		std::string kdtreefile = csvfile + ".kdtree";
+		if (!boost::filesystem::exists(kdtreefile))
+			res = this->createKdTree(csvfile);
+		if (res)
+		{
+			this->_fTree.open(kdtreefile);
+			this->_nodes = reinterpret_cast<const KdNode*>(_fTree.data());
+			size_t nodeCount = this->_fTree.size()/sizeof(KdNode);
+			this->_endNode = this->_nodes+nodeCount;
+		}
 	}
 
 	Iterator KDTree::begin()
@@ -27,8 +38,8 @@ namespace QProcessor
 	{
 		uint32_t range[3][2] = {
 			{q._minTime, q._maxTime},
-			{float2uint(q._minLon), float2uint(q._maxLon)},
 			{float2uint(q._minLat), float2uint(q._maxLat)},
+			{float2uint(q._minLon), float2uint(q._maxLon)},
 		};
 		QueryResult result;
 		result._points = PPointVector(new PointVector());
@@ -133,7 +144,6 @@ namespace QProcessor
 		//Check indices
 		for(int i=0; i<4; i++)
 		{
-			std::cout<<indices[i]<<std::endl;
 			if (indices[i] == -1)
 				return false;
 		}
@@ -142,9 +152,9 @@ namespace QProcessor
 		while(std::getline(in, line))
 		{
 			int index = 0;
+			std::stringstream lineStream(line);
 			while (index < attNum)
 			{
-				std::stringstream lineStream(line);
 				std::getline(lineStream, temp, ',');
 				if (index == indices[0])
 					point._id = boost::lexical_cast<uint32_t>(temp);
@@ -162,8 +172,9 @@ namespace QProcessor
 		return true;
 	}
 
-	void KDTree::searchKdTree(const KdNode *nodes, uint32_t root, uint32_t range[7][2], int depth, const Query &query, QueryResult &result) 
+	void KDTree::searchKdTree(const KdNode *nodes, uint32_t root, uint32_t range[3][2], int depth, const Query &query, QueryResult &result) 
 	{
+		std::cout<<"searchKdTree"<<std::endl;
 		const KdNode * pNode = nodes + root;
 		if (pNode->_childNode==-1) return;
 		if (pNode->_childNode==0) {
